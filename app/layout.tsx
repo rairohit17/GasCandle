@@ -9,10 +9,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="light">
-      <body className=" bg-gray-950 bg-cover bg-center w-full  min-h-screen bg-background">
+    <html lang="en" className="light ">
+      <body className="bg-background bg-cover bg-center w-full min-h-screen">
         <main className="relative flex min-h-screen flex-col">
-          <Header></Header>
+          <div>
+            <Header></Header>
+          </div>
           {children}
         </main>
       </body>
