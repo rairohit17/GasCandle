@@ -12,7 +12,7 @@ import {
 import Link from 'next/link';
 const Header = () => {
   return (
-    <div className="text-[#2d7ad9] flex  justify-between mt-[2rem] w-full  fixed top-0   ">
+    <div className="text-[#2d7ad9] flex bg-[hsl(210,100%,98%)]  justify-between pt-[2rem] w-full  fixed top-0   ">
       <div className="text-3xl ml-[30px]">GasEye . </div>
       <div className="mr-[1rem] md:hidden cursor-pointer">
         <Sheet>

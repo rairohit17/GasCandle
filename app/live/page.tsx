@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // App Router
-import { useSearchParams } from 'next/navigation';
+import React,  { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useBlockchainStore, GasPoint } from '../utils/store';
 import CandlestickChart from '@/components/chart';
 import {
   DropdownMenu,
@@ -12,48 +12,70 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import useBlockchain from '../utils/store';
+import { CandlestickData, UTCTimestamp } from 'lightweight-charts';
+
 const Page = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const chain = searchParams.get('chain');
-  const blockchainState  =  useBlockchain();
+  const blockchainState = useBlockchainStore();
+  const currentChain = blockchainState.blockchain;
+
   useEffect(() => {
+    const chainFromUrl = searchParams.get('chain');
     const allowedChains = ['ethereum', 'arbitrum', 'polygon'];
-    blockchainState.changeBlockchain(chain as string);
-    if (!chain || !allowedChains.includes(chain)) {
+
+    if (chainFromUrl && allowedChains.includes(chainFromUrl)) {
+    
+      blockchainState.changeBlockchain(chainFromUrl as 'ethereum' | 'arbitrum' | 'polygon');
+    } else {
+     
       router.push('/');
     }
-  }, [chain, router]); // Dependency array
+  }, [searchParams, router, blockchainState.changeBlockchain]);
+
+ 
+  const history: GasPoint[] = blockchainState.chains[currentChain]?.history || [];
+
+ 
+  const chartData: CandlestickData[] = history.map((point) => ({
+    time: point.time as UTCTimestamp,
+    open: Number(point.open),
+    high: Number(point.high),
+    low: Number(point.low),
+    close: Number(point.close),
+  }));
+
+  const handleChainChange = (chain: 'ethereum' | 'arbitrum' | 'polygon') => {
+    blockchainState.changeBlockchain(chain);
+    router.push(`/live?chain=${chain}`);
+  };
 
   return (
-    <div className="">
-      <div className="text-center text-3xl mt-[20vh] flex justify-center  gap-7">
-        <div>Live Mode :  </div>
-        <div>
-          <DropdownMenu>
-            <DropdownMenuTrigger className='select-none'>{(blockchainState.blockchain)}</DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>Select Blockchain</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={()=>{
-                blockchainState.changeBlockchain("ethereum")
-                router.push("/live?chain=ethereum")
-              }}>ethereum</DropdownMenuItem>
-              <DropdownMenuItem onSelect={()=>{
-                blockchainState.changeBlockchain("arbitrum")
-                router.push("/live?chain=arbitrum")
-              }}>arbitrum</DropdownMenuItem>
-              <DropdownMenuItem onSelect={()=>{
-                blockchainState.changeBlockchain("polygon")
-                router.push("/live?chain=polygon")
-              }}>polygon</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+    <div>
+      <div className="text-center text-3xl mt-[10vh] flex justify-center items-center gap-4">
+        <div>Live Gas Fees:</div>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="select-none capitalize text-blue-500 font-semibold border px-4 py-2 rounded-md">
+            {currentChain}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Select Blockchain</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={() => handleChainChange('ethereum')}>
+              Ethereum
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => handleChainChange('arbitrum')}>
+              Arbitrum
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => handleChainChange('polygon')}>
+              Polygon
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
-      <div className=" ">
-        <CandlestickChart></CandlestickChart>
+      <div className="mt-8">
+  
+        <CandlestickChart data={chartData} />
       </div>
     </div>
   );

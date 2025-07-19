@@ -14,7 +14,7 @@ html {
 
 @layer base {
   :root {
-    --background: 210 100% 98%; /* Very light blue tint */
+    --background: 210 100% 98%; 
 
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -42,7 +42,7 @@ html {
     --radius: 0.5rem;
   }
   .dark {
-    --background: 3 7 18; /* equivalent to #030712 or tailwind gray-950 */
+    --background: 3 7 18; 
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
