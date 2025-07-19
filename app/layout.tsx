@@ -67,7 +67,7 @@ export default function RootLayout({
         state.addToBuffer(chain, point);
         // console.log(state.chains)
       });
-    }, 6000); // Every 6s
+    }, 6000); 
 
     const historyInterval = setInterval(() => {
       const state = useBlockchainStore.getState();
@@ -94,7 +94,7 @@ export default function RootLayout({
         state.addGasPoint(chain, summarizedPoint);
         state.setBuffer(chain, []); 
       });
-    }, 1 * 60 * 1000); // Every 15m
+    }, 2 * 60 * 1000); 
 
     
     return () => {

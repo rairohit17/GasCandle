@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⛽ Real-Time Cross-Chain Gas Fee Tracker & Simulation
 
-## Getting Started
+This application is a full-stack gas fee tracker and simulator built with **Next.js**, **Zustand**, **TailwindCSS**, and **Lightweight Charts**, providing real-time insights and transaction fee estimation on multiple blockchains.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- 🌐 **Multi-Chain Support** — Ethereum, Arbitrum, and Polygon.
+- 📈 **Live Gas Price Candlestick Charts**
+- 💸 **Gas Fee Estimation** — Estimate ETH/USD value of transactions based on current network conditions.
+- ⚡ **Fast & Lightweight** — Built with performance in mind using Next.js & client-side state management via Zustand.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Layer        | Stack                        |
+|--------------|------------------------------|
+| Frontend     | Next.js, React, Tailwind CSS |
+| State Mgmt   | Zustand                      |
+| Blockchain   | Ethers.js, Uniswap SDK       |
+| Charting     | Lightweight-Charts           |
+| Deployment   | Vercel                       |
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📷 Screenshots
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Live Dashboard | Simulation Mode |
+|----------------|-----------------|
+| ![Live Mode](https://github.com/user-attachments/assets/c7d0fb02-e888-4b31-a1fa-cec6d03308ec) | ![Simulation Mode](https://github.com/user-attachments/assets/c152b21d-49ce-4702-8908-2fc4a60e1fd9) |
+ ---
