@@ -1,7 +1,6 @@
 'use client';
-
+import { Suspense } from 'react';
 import '../globals.css'; 
-import Header from '@/components/Header';
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -12,7 +11,8 @@ export default function RootLayout({
       
         <main className="relative flex min-h-screen flex-col">
           {/* <Header></Header> */}
-          {children}
+          <Suspense fallback={<div>Loading.....</div>}>{children}</Suspense>
+          
         </main>
   
   );

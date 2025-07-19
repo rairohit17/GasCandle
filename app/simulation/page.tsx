@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useBlockchainStore, GasPoint } from '../utils/store';
 import CandlestickChart from '@/components/chart';
@@ -19,14 +19,13 @@ import { Pool } from '@uniswap/v3-sdk';
 import { Token } from '@uniswap/sdk-core';
 import { CandlestickData, UTCTimestamp } from 'lightweight-charts';
 
-
-const Page = () => {
+// Actual inner page that uses hooks
+const PageContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const blockchainState = useBlockchainStore();
   const currentChain = blockchainState.blockchain;
 
-  // State for the simulation
   const [ethUsdPrice, setEthUsdPrice] = useState<number | null>(null);
   const [gasLimit, setGasLimit] = useState('21000'); 
   const [estimatedFee, setEstimatedFee] = useState<string | null>(null);
@@ -40,7 +39,7 @@ const Page = () => {
       router.push('/');
     }
   }, [searchParams, router, blockchainState.changeBlockchain]);
-  
+
   useEffect(() => {
     const getEthUsdPrice = async () => {
       try {
@@ -53,7 +52,7 @@ const Page = () => {
 
         const USDC = new Token(1, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'USDC');
         const WETH = new Token(1, '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', 18, 'WETH');
-        
+
         const poolContract = new ethers.Contract(poolAddress, abi, provider);
         const [slot0, liquidity] = await Promise.all([
           poolContract.slot0(),
@@ -61,32 +60,17 @@ const Page = () => {
         ]);
 
         const { sqrtPriceX96, tick } = slot0;
-        
-        const pool = new Pool(
-          USDC, 
-          WETH, 
-          500,
-          sqrtPriceX96.toString(),
-          liquidity.toString(),
-          Number(tick)
-        );
-        
-        const priceOfWethInUsdc = pool.token1Price;
-        
-        return priceOfWethInUsdc.toSignificant(6);
-
+        const pool = new Pool(USDC, WETH, 500, sqrtPriceX96.toString(), liquidity.toString(), Number(tick));
+        return pool.token1Price.toSignificant(6);
       } catch (err) {
-        console.error('Failed to fetch ETH/USD price from Uniswap V3:', err);
-        return null; 
+        console.error('Failed to fetch ETH/USD price:', err);
+        return null;
       }
     };
 
-    getEthUsdPrice().then((priceString) => {
-      if (priceString) {
-        setEthUsdPrice(Number(priceString));
-      }
+    getEthUsdPrice().then((price) => {
+      if (price) setEthUsdPrice(Number(price));
     });
-    
   }, []);
 
   const handleEstimate = () => {
@@ -99,28 +83,21 @@ const Page = () => {
 
     const chainData = blockchainState.chains.ethereum;
     if (!chainData || !ethUsdPrice || !gasLimit) {
-      setEstimatedFee("Data is not yet available. Please wait.");
+      setEstimatedFee("Data not available. Please wait.");
       return;
     }
 
     try {
-      // 
       const gasPricePerUnit = chainData.baseFee + chainData.priorityFee;
       const totalFeeInWei = gasPricePerUnit * BigInt(gasLimit);
-
-    
       const totalFeeInEth = ethers.formatEther(totalFeeInWei);
-
-     
       const feeInUsd = parseFloat(totalFeeInEth) * ethUsdPrice;
-      
       setEstimatedFee(`Estimated Fee: $${feeInUsd.toFixed(2)}`);
     } catch (e) {
       console.error("Calculation error:", e);
       setEstimatedFee("Error calculating fee.");
     }
   };
-
 
   const history: GasPoint[] = blockchainState.chains[currentChain]?.history || [];
 
@@ -155,6 +132,7 @@ const Page = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
       <div className="flex flex-col items-center gap-3 text-center mt-3">
         <div className="flex items-center gap-3">
           <Input
@@ -162,7 +140,7 @@ const Page = () => {
             placeholder="Enter Gas Limit"
             value={gasLimit}
             onChange={(e) => setGasLimit(e.target.value)}
-            />
+          />
           <Button onClick={handleEstimate}>Estimate Fee</Button>
         </div>
         {estimatedFee && (
@@ -171,11 +149,18 @@ const Page = () => {
           </div>
         )}
       </div>
+
       <div className="mt-8">
         <CandlestickChart data={chartData} />
       </div>
     </div>
   );
 };
+
+const Page = () => (
+  <Suspense fallback={<div className="text-center mt-10 text-gray-400">Loading ...</div>}>
+    <PageContent />
+  </Suspense>
+);
 
 export default Page;

@@ -3,7 +3,6 @@ import Link from 'next/link';
 
 import { useState } from 'react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import Header from '@/components/Header';
 export default function Home() {
   const [selectedChain, setSelectedChain] = useState('ethereum');
 
