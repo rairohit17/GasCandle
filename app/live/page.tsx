@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { CandlestickData, UTCTimestamp } from 'lightweight-charts';
+import Header from '@/components/Header';
 
 const LiveGasChart = () => {
   const router = useRouter();
@@ -79,6 +80,7 @@ const LiveGasChart = () => {
 export default function Page() {
   return (
     <Suspense fallback={<div className="text-center mt-20">Loading Live Data...</div>}>
+      <Header></Header>
       <LiveGasChart />
     </Suspense>
   );

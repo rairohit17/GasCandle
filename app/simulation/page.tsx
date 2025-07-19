@@ -18,6 +18,7 @@ import { ethers } from 'ethers';
 import { Pool } from '@uniswap/v3-sdk';
 import { Token } from '@uniswap/sdk-core';
 import { CandlestickData, UTCTimestamp } from 'lightweight-charts';
+import Header from '@/components/Header';
 
 // Actual inner page that uses hooks
 const PageContent = () => {
@@ -159,6 +160,7 @@ const PageContent = () => {
 
 const Page = () => (
   <Suspense fallback={<div className="text-center mt-10 text-gray-400">Loading ...</div>}>
+    <Header></Header>
     <PageContent />
   </Suspense>
 );

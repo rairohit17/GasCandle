@@ -34,7 +34,6 @@ const Header = () => {
       </div>
       <div className=" gap-[70px] mr-[50px] hidden md:flex ">
         <Link href={'./'}>
-          {' '}
           <div className="cursor-pointer font-bold">Home</div>
         </Link>
         <div className="cursor-pointer font-bold ">About</div>
