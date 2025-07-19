@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <div>
-      <Header></Header>
+      {/* <Header></Header> */}
       <main className="min-h-screen w-full mt-[30px] px-[30px] select-none">
         <div className="mt-[100px]">
           <h2 className="md:max-w-[60vw] stroke text-[2.5rem] text-blue-800 md:text-[3.5rem] transition duration-100  font-bold cursor-pointer">

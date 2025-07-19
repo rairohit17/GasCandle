@@ -11,7 +11,7 @@ export default function RootLayout({
     
       
         <main className="relative flex min-h-screen flex-col">
-          <Header></Header>
+          {/* <Header></Header> */}
           {children}
         </main>
   
